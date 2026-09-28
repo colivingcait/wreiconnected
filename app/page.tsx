@@ -19,7 +19,9 @@ export default function HomePage() {
     nextEventForGroup("charleston"),
     upcomingEvents().find((event) => event.type === "affiliate"),
     nextSummit(),
-  ].filter((event): event is WreiEvent => Boolean(event));
+  ]
+    .filter((event): event is WreiEvent => Boolean(event))
+    .sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
 
   return (
     <>

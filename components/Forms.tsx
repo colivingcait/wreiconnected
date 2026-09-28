@@ -61,6 +61,9 @@ export function SignupForm({
         defaultValue={cityValue}
         required
       />
+      {kind === "national-signup" ? (
+        <input className="full" name="phone" type="tel" placeholder="Phone (optional)" aria-label="Phone (optional)" />
+      ) : null}
       <label className="chk full">
         <input type="checkbox" name="emailConsent" defaultChecked />
         {emailLabel}

@@ -1,7 +1,8 @@
 import { chapters } from "../lib/chapters";
-import { NATIONAL_SENTENCE, citySentence } from "../lib/site";
-import { getRouteSchemas } from "../lib/schema";
 import { getAllPosts } from "../lib/blog";
+import { eventsForGroup, nextSummit, upcomingEvents } from "../lib/events";
+import { getRouteSchemas } from "../lib/schema";
+import { NATIONAL_SENTENCE, citySentence } from "../lib/site";
 
 type Node = Record<string, unknown>;
 
@@ -57,6 +58,9 @@ for (const graph of graphs) {
     if (!list.includes("ReConnected") || !list.includes("WREI")) {
       failures.push(`${graph.path} Organization.alternateName must include ReConnected and WREI`);
     }
+    if (Object.prototype.hasOwnProperty.call(national, "sameAs")) {
+      failures.push(`${graph.path} national Organization must not include sameAs`);
+    }
   }
 
   if (!findAll(nodes, "BreadcrumbList").length) {
@@ -86,10 +90,19 @@ for (const chapter of chapters) {
     for (const extra of chapter.alternateNames ?? []) {
       if (!names.includes(extra)) failures.push(`/${chapter.slug} missing alternateName ${extra}`);
     }
+    if (chapter.slug === "atlanta") {
+      const same = Array.isArray(chapterOrg.sameAs) ? chapterOrg.sameAs.map(String) : [];
+      if (!same.includes("https://atlantawomeninvestors.com")) {
+        failures.push("/atlanta chapter Organization must keep sameAs https://atlantawomeninvestors.com");
+      }
+    }
   }
 
+  const publishedOffline = eventsForGroup(chapter.slug).filter((event) => !event.placeholder);
   const events = findAll(nodes, "Event").filter((event) => event.eventAttendanceMode !== "https://schema.org/OnlineEventAttendanceMode");
-  if (!events.length) failures.push(`/${chapter.slug} missing offline Event`);
+  if (events.length !== publishedOffline.length) {
+    failures.push(`/${chapter.slug} offline Event count ${events.length} != non-placeholder meetups ${publishedOffline.length}`);
+  }
   for (const event of events) {
     requireFields(graph.path, event, [
       "name",
@@ -129,16 +142,26 @@ for (const chapter of chapters) {
     }
   }
 
+  const summitSource = nextSummit();
   const summit = findAll(nodes, "Event").find(
     (event) => event.eventAttendanceMode === "https://schema.org/OnlineEventAttendanceMode",
   );
-  if (!summit) failures.push(`/${chapter.slug} missing Quarterly Summit Event`);
-  else if (!String(summit.description).includes("the national online summit for women real estate investors")) {
+  if (!summitSource || summitSource.placeholder) {
+    if (summit) failures.push(`/${chapter.slug} must not emit a placeholder Quarterly Summit`);
+  } else if (!summit) {
+    failures.push(`/${chapter.slug} missing Quarterly Summit Event`);
+  } else if (!String(summit.description).includes("the national online summit for women real estate investors")) {
     failures.push(`/${chapter.slug} summit description missing the required phrase`);
   } else {
     const location = asNode(summit.location);
     if (!types(location).includes("VirtualLocation")) {
       failures.push(`/${chapter.slug} summit location is not VirtualLocation`);
+    }
+    if (!summitSource.startTime && String(summit.startDate).includes("T")) {
+      failures.push(`/${chapter.slug} summit startDate must be the date only while time is TBA`);
+    }
+    if (!summitSource.endTime && summit.endDate) {
+      failures.push(`/${chapter.slug} summit must omit endDate while the end time is unknown`);
     }
   }
 
@@ -151,13 +174,29 @@ for (const chapter of chapters) {
 
 const eventsGraph = graphs.find((item) => item.path === "/events");
 if (eventsGraph) {
-  const summit = eventsGraph.nodes.map(asNode).find((node) => types(node).includes("Event") && node.eventAttendanceMode === "https://schema.org/OnlineEventAttendanceMode");
-  if (!summit) failures.push("/events missing online Quarterly Summit");
-  else {
+  const nodes = eventsGraph.nodes.map(asNode);
+  const eventNodes = findAll(nodes, "Event");
+  const published = upcomingEvents().filter((event) => !event.placeholder);
+  if (eventNodes.length !== published.length) {
+    failures.push(`/events JSON-LD has ${eventNodes.length} events; non-placeholder upcoming events: ${published.length}`);
+  }
+  const summit = eventNodes.find((node) => node.eventAttendanceMode === "https://schema.org/OnlineEventAttendanceMode");
+  const summitSource = nextSummit();
+  if (!summitSource || summitSource.placeholder) {
+    if (summit) failures.push("/events must not emit a placeholder Quarterly Summit");
+  } else if (!summit) {
+    failures.push("/events missing online Quarterly Summit");
+  } else {
     const location = asNode(summit.location);
     if (!types(location).includes("VirtualLocation")) failures.push("/events summit missing VirtualLocation");
     if (!String(summit.description).includes("the national online summit for women real estate investors")) {
       failures.push("/events summit description missing required phrase");
+    }
+    if (!summitSource.startTime && String(summit.startDate).includes("T")) {
+      failures.push("/events summit startDate must be the date only while time is TBA");
+    }
+    if (String(summit.startDate).includes("T12:00:00")) {
+      failures.push("/events summit must not invent a 12:00 start time");
     }
   }
 }

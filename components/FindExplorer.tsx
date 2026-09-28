@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { SiteNav } from "@/components/SiteChrome";
 import { dateParts } from "@/lib/display";
 import { nextEventForGroup, nextSummit } from "@/lib/events";
@@ -23,15 +22,12 @@ function project(group: DirectoryGroup) {
 }
 
 export function FindExplorer({ groups }: { groups: DirectoryGroup[] }) {
-  const params = useSearchParams();
-  const queryFromUrl = params.get("q") ?? "";
-  const [q, setQ] = useState(queryFromUrl);
+  const [q, setQ] = useState("");
   const [kind, setKind] = useState<"all" | "chapter" | "affiliate">("all");
-  const [prevQuery, setPrevQuery] = useState(queryFromUrl);
-  if (queryFromUrl !== prevQuery) {
-    setPrevQuery(queryFromUrl);
-    setQ(queryFromUrl);
-  }
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search).get("q") ?? "";
+    if (query) setQ(query);
+  }, []);
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();

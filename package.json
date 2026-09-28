@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run check:seo && npm run validate:schema",
+    "predev": "node scripts/copy-maplibre-worker.mjs",
+    "prebuild": "npm run check:seo && npm run validate:schema && node scripts/copy-maplibre-worker.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

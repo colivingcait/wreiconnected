@@ -30,12 +30,6 @@ import type { WreiEvent } from "@/lib/types";
 
 type JsonLd = WithContext<Organization | Event | FAQPage | BreadcrumbList | Person | BlogPosting>;
 
-/**
- * TODO: national Eventbrite, Instagram, Facebook, and LinkedIn URLs
- * were not in the handoff. Add them here when the founders confirm them.
- */
-export const NATIONAL_SAME_AS: string[] = [];
-
 function breadcrumbs(items: { name: string; path: string }[]): WithContext<BreadcrumbList> {
   return {
     "@context": "https://schema.org",
@@ -58,7 +52,6 @@ export function nationalOrganization(): WithContext<Organization> {
     description: NATIONAL_SENTENCE,
     url: SITE_URL,
     logo: absoluteUrl("/logo.svg"),
-    sameAs: NATIONAL_SAME_AS,
   };
 }
 
@@ -90,7 +83,7 @@ function chapterOrganization(chapter: (typeof chapters)[number]): WithContext<Or
       },
     },
     alternateName: ["ReConnected", "WREI", ...(chapter.alternateNames ?? [])],
-    sameAs,
+    ...(sameAs.length ? { sameAs } : {}),
   };
 }
 
@@ -128,14 +121,18 @@ function faqPage(items: { question: string; answer: string }[]): WithContext<FAQ
   };
 }
 
-function schemaTimes(event: WreiEvent, timeZone: string): { startDate: string; endDate: string } {
-  // Summit clock time is still TBA in the UI. Schema needs a real offset datetime.
-  const start = event.startTime ?? "12:00";
-  const end = event.endTime ?? "13:30";
+function schemaTimes(event: WreiEvent, timeZone: string): { startDate: string; endDate?: string } {
+  if (!event.startTime) {
+    return { startDate: event.date };
+  }
   return {
-    startDate: zonedIso(event.date, start, timeZone),
-    endDate: zonedIso(event.date, end, timeZone),
+    startDate: zonedIso(event.date, event.startTime, timeZone),
+    ...(event.endTime ? { endDate: zonedIso(event.date, event.endTime, timeZone) } : {}),
   };
+}
+
+function indexableEvent(event: WreiEvent | undefined): event is WreiEvent {
+  return Boolean(event && !event.placeholder);
 }
 
 export function eventSchema(event: WreiEvent): WithContext<Event> | undefined {
@@ -152,8 +149,7 @@ export function eventSchema(event: WreiEvent): WithContext<Event> | undefined {
       "@type": "Event",
       name: "Quarterly Summit",
       description: eventDescription(event, group),
-      startDate: times.startDate,
-      endDate: times.endDate,
+      ...times,
       eventStatus: "https://schema.org/EventScheduled",
       eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
       image,
@@ -184,8 +180,7 @@ export function eventSchema(event: WreiEvent): WithContext<Event> | undefined {
     "@type": "Event",
     name: eventName(event, group),
     description: eventDescription(event, group),
-    startDate: times.startDate,
-    endDate: times.endDate,
+    ...times,
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     image,
@@ -265,11 +260,13 @@ export function schemasForPath(path: string): JsonLd[] {
 
   if (path === "/") {
     const summit = nextSummit();
-    return [...base, ...(summit ? [eventSchema(summit)].filter(Boolean) as JsonLd[] : []), breadcrumbs([{ name: "Home", path: "/" }])];
+    const summitNode = indexableEvent(summit) ? eventSchema(summit) : undefined;
+    return [...base, ...(summitNode ? [summitNode] : []), breadcrumbs([{ name: "Home", path: "/" }])];
   }
 
   if (path === "/events") {
     const events = upcomingEvents()
+      .filter((event) => !event.placeholder)
       .map((event) => eventSchema(event))
       .filter((node): node is WithContext<Event> => Boolean(node));
     return [
@@ -287,7 +284,9 @@ export function schemasForPath(path: string): JsonLd[] {
     const people = chapter.hosts
       .map((host) => hostPerson(chapter, host.id))
       .filter((node): node is WithContext<Person> => Boolean(node));
-    const meetups = [...eventsForGroup(chapter.slug), ...(nextSummit() ? [nextSummit()!] : [])]
+    const summit = nextSummit();
+    const meetups = [...eventsForGroup(chapter.slug), ...(indexableEvent(summit) ? [summit] : [])]
+      .filter((event) => !event.placeholder)
       .map((event) => eventSchema(event))
       .filter((node): node is WithContext<Event> => Boolean(node));
     return [

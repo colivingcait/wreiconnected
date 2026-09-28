@@ -42,3 +42,6 @@ next-env.d.ts
 
 # source handoff (not part of the site)
 /handoff
+
+# MapLibre worker files copied from node_modules at predev/prebuild
+/public/maplibre/*.mjs

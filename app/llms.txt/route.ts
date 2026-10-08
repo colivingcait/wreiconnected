@@ -5,7 +5,7 @@ import { NATIONAL_SENTENCE, SITE_URL, absoluteUrl, citySentence } from "@/lib/si
 export const dynamic = "force-static";
 
 export function GET() {
-  const lines = ["# WREI Connected", "", NATIONAL_SENTENCE, "", "## Chapters", ""];
+  const lines = ["# WREI Connected", "", NATIONAL_SENTENCE, "", "## Markets", ""];
   for (const chapter of chapters) {
     lines.push(
       `- [${chapter.groupName}](${absoluteUrl(`/${chapter.slug}`)}): ${citySentence(chapter.city, chapter.state)}`,
@@ -15,7 +15,7 @@ export function GET() {
     "",
     "## Events",
     "",
-    `- [Women's real estate investing meetups](${absoluteUrl("/events")}): Every WREI Connected chapter, affiliate, and the Quarterly Summit online.`,
+    `- [Women's real estate investing meetups](${absoluteUrl("/events")}): Every WREI Connected market, affiliate, and the Quarterly Summit online.`,
     "",
     "## Key guides",
     "",

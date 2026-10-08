@@ -4,17 +4,10 @@ import { HostMessageForm, SignupForm } from "@/components/Forms";
 import { SiteNav } from "@/components/SiteChrome";
 import { calendarUrl, dateParts, timeLabel } from "@/lib/display";
 import { eventsForGroup, nextSummit } from "@/lib/events";
-import { AGENDA, chapterFaqs } from "@/lib/faq";
+import { chapterFaqs } from "@/lib/faq";
 import { getCityGuide, getLatestRecap } from "@/lib/blog";
-import { aboutSentence } from "@/lib/site";
+import { MARKET_BLURB, marketName } from "@/lib/site";
 import type { Chapter } from "@/lib/types";
-
-function hostTitle(chapter: Chapter) {
-  const names = chapter.hosts.map((host) => host.name.split(" ")[0]);
-  if (names.length === 1) return `Meet ${chapter.hosts[0].name}`;
-  if (names.length === 2) return `Meet ${names[0]} and ${names[1]}`;
-  return "Meet your hosts";
-}
 
 export function ChapterView({ chapter }: { chapter: Chapter }) {
   const meetups = eventsForGroup(chapter.slug);
@@ -25,136 +18,111 @@ export function ChapterView({ chapter }: { chapter: Chapter }) {
   const recap = getLatestRecap(chapter.slug);
   const faqs = chapterFaqs(chapter);
   const featuredParts = featured ? dateParts(featured, chapter.timezone) : null;
+  const name = marketName(chapter.city);
   const address = [chapter.streetAddress, `${chapter.city}, ${chapter.stateCode}`, chapter.postalCode]
     .filter(Boolean)
     .join(", ");
-  const directions = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    [chapter.venueName, chapter.streetAddress, chapter.city, chapter.stateCode].filter(Boolean).join(" "),
-  )}`;
 
   return (
     <>
       <div className="top on-mid">
         <div className="c">
           <SiteNav />
-      <div className="crumb">
-        <Link href="/find">Find a Meetup</Link>
-        {" / "}
-        {chapter.city}
-        <span style={{ opacity: 0.55 }}> · wreiconnected.com/{chapter.slug}</span>
-      </div>
-      <section className="chero">
-        <div>
-          <div className="eyebrow">{chapter.city}&apos;s meetup for women real estate investors</div>
-          <h1>
-            WREI Connected |<br />
-            <span>{chapter.city}</span>
-          </h1>
-          {chapter.formerly ? <p className="formerly">{`Formerly ${chapter.formerly}.`}</p> : null}
-          <p className="about-line">
-            <strong>About this group. </strong>
-            {aboutSentence(chapter)}
-          </p>
-          <p className="lede">{chapter.heroLede}</p>
-          <div className="acts">
-            {featured ? (
-              <a className="btn btn-peach" href={featured.rsvpUrl}>
-                RSVP for {featuredParts ? `${featuredParts.month.charAt(0)}${featuredParts.month.slice(1).toLowerCase()} ${featuredParts.day}` : "the next meetup"}
-              </a>
-            ) : null}
-            <a className="btn btn-line-lt" href="#msg">
-              Message the hosts
-            </a>
+          <div className="crumb">
+            <Link href="/find">Find a Meetup</Link>
+            {" / "}
+            {chapter.city}
           </div>
-          <nav className="chapter-links" aria-label="Related">
-            {guide ? <Link href={`/blog/${guide.slug}`}>{chapter.city} investing guide</Link> : null}
-            {recap ? <Link href={`/blog/${recap.slug}`}>Latest meetup recap</Link> : null}
-            <Link href="/events">All events</Link>
-            <a href="#hosts">Hosts</a>
-          </nav>
-          {chapter.placeholder ? <p className="placeholder-flag">Placeholder chapter</p> : null}
-        </div>
-        <Image
-          className="hero-photo"
-          src={chapter.heroImage}
-          alt={chapter.heroImageAlt}
-          width={chapter.slug === "atlanta" ? 640 : 900}
-          height={chapter.slug === "atlanta" ? 800 : 700}
-          priority
-        />
-      </section>
+          <section className="chero">
+            <div>
+              <div className="eyebrow">{chapter.city}&apos;s meetup for women real estate investors</div>
+              <h1>
+                <span>{chapter.city}</span>
+                <br />
+                WREI Connected
+              </h1>
+              {chapter.poweredBy ? <p className="powered">Powered by {chapter.poweredBy}</p> : null}
+              {chapter.formerly ? <p className="formerly">{`Formerly ${chapter.formerly}.`}</p> : null}
+              <p className="lede">{MARKET_BLURB}</p>
+              <div className="acts">
+                {featured ? (
+                  <a className="btn btn-peach" href={featured.rsvpUrl}>
+                    RSVP
+                  </a>
+                ) : null}
+                <a className="btn btn-line-lt" href="#msg">
+                  Message the hosts
+                </a>
+              </div>
+              <nav className="chapter-links" aria-label="Related">
+                {guide ? <Link href={`/blog/${guide.slug}`}>{chapter.city} investing guide</Link> : null}
+                {recap ? <Link href={`/blog/${recap.slug}`}>Latest meetup recap</Link> : null}
+                <Link href="/events">All events</Link>
+              </nav>
+              {chapter.placeholder ? <p className="placeholder-flag">Placeholder market</p> : null}
+            </div>
+            <Image
+              className="hero-photo"
+              src={chapter.heroImage}
+              alt={chapter.heroImageAlt}
+              width={900}
+              height={700}
+              priority
+            />
+          </section>
         </div>
       </div>
 
-      <div className="c">
-        <div className="ww">
-          <div className="info">
-            <div className="eyebrow" style={{ marginBottom: 10 }}>
-              Where and when
+      <section className="sec">
+        <div className="c">
+          <div className="head">
+            <div>
+              <div className="eyebrow">Your co-hosts</div>
+              <h2 className="big" style={{ marginTop: 10 }}>
+                Meet your Co-Hosts
+              </h2>
             </div>
-            <div className="wrow">
-              <b>When</b>
-              <div>
-                <div className="v">{chapter.rhythm.replace(/^the\s+/i, "").replace(/^./, (char) => char.toUpperCase())}</div>
-                <div className="s">
-                  {chapter.timeRange}
-                  {featured && featuredParts ? ` · next one ${featuredParts.weekday.slice(0, 1)}${featuredParts.weekday.slice(1).toLowerCase()}, ${featuredParts.month.slice(0, 1)}${featuredParts.month.slice(1).toLowerCase()} ${featuredParts.day}` : ""}
+          </div>
+          <div className="hosts">
+            {chapter.hosts.map((host) => (
+              <article className="host" id={`host-${host.id}`} key={host.id}>
+                <Image src={host.photo} alt={`${host.name}, co-host of ${name}, a women's real estate investing meetup`} width={host.photoWidth} height={host.photoHeight} />
+                <div>
+                  <div className="n">{host.name}</div>
+                  <div className="r">{host.role}</div>
+                  <p>{host.bio}</p>
                 </div>
-              </div>
-            </div>
-            <div className="wrow">
-              <b>Where</b>
-              <div>
-                <div className="v">{chapter.venueName}</div>
-                <div className="s">{address || `${chapter.city}, ${chapter.stateCode}`}</div>
-              </div>
-            </div>
-            <div className="wrow">
-              <b>Look for</b>
-              <div>
-                <div className="v">{chapter.lookFor}</div>
-                <div className="s">{chapter.lookForDetail}</div>
-              </div>
-            </div>
-            <div className="wrow">
-              <b>Parking</b>
-              <div>
-                <div className="v">Parking at the venue</div>
-                <div className="s">{chapter.parkingNote}</div>
-              </div>
-            </div>
-            <div className="wrow">
-              <b>Cost</b>
-              <div>
-                <div className="v">{chapter.cost}</div>
-                <div className="s">RSVP so we can plan the space</div>
-              </div>
-            </div>
-          </div>
-          <div className="mapwrap">
-            <div className="decor-map" aria-hidden>
-              <div className="pin-mark" />
-            </div>
-            <a className="btn btn-line" href={directions}>
-              Get directions
-            </a>
+              </article>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      <section className="sec" style={{ paddingTop: 72 }}>
+      <section className="sec" style={{ paddingTop: 0 }}>
+        <div className="c">
+          <div className="story">
+            <div>
+              <div className="eyebrow">About us</div>
+              <h2 className="big" style={{ marginTop: 10 }}>
+                A message from your hosts
+              </h2>
+            </div>
+            <div className="body">
+              <p>{chapter.hostIntro}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="sec" style={{ paddingTop: 0 }}>
         <div className="c">
           <div className="head">
             <div>
               <div className="eyebrow">Come to the next one</div>
               <h2 className="big" style={{ marginTop: 10 }}>
-                Upcoming meetups
+                Upcoming events
               </h2>
             </div>
-            <span className="sync">
-              <i />
-              Updates automatically from Eventbrite
-            </span>
           </div>
           <div className="upw">
             {featured && featuredParts ? (
@@ -175,33 +143,26 @@ export function ChapterView({ chapter }: { chapter: Chapter }) {
                     <div className="topic">{featured.topic}</div>
                   </div>
                 </div>
-                <div className="agenda">
-                  {AGENDA.map((item) => (
-                    <div key={item.time}>
-                      <span>{item.time}</span>
-                      {item.label}
-                    </div>
-                  ))}
-                </div>
                 <div className="foot2">
                   <a className="btn btn-peach" href={featured.rsvpUrl}>
                     RSVP free
                   </a>
                   <small>
                     {featured.goingCount ? `${featured.goingCount} going · ` : null}
-                    <a href={calendarUrl(featured, `${chapter.groupName} – ${featured.title}`, address)}>Add to calendar</a>
+                    <a href={calendarUrl(featured, `${name} – ${featured.title}`, address)}>Add to calendar</a>
                   </small>
                 </div>
               </div>
             ) : (
               <div className="next">
                 <div className="t">Dates coming soon</div>
-                <p className="topic">The host has not published the next meetup yet.</p>
+                <p className="topic">The hosts have not published the next meetup yet.</p>
               </div>
             )}
             <div className="evlist">
               {later.map((event) => {
                 const parts = dateParts(event, event.type === "summit" ? "America/New_York" : chapter.timezone);
+                const weekday = `${parts.weekday.slice(0, 1)}${parts.weekday.slice(1).toLowerCase()}`;
                 return (
                   <div className={event.type === "summit" ? "ev2 sum" : "ev2"} key={event.id}>
                     <div className="dt">
@@ -212,41 +173,15 @@ export function ChapterView({ chapter }: { chapter: Chapter }) {
                       <div className="t">{event.type === "summit" ? "Quarterly Summit" : event.title}</div>
                       <div className="s">
                         {event.type === "summit"
-                          ? `${parts.weekday.slice(0, 1)}${parts.weekday.slice(1).toLowerCase()} · Online · the whole national network`
-                          : `${parts.weekday.slice(0, 1)}${parts.weekday.slice(1).toLowerCase()} · ${timeLabel(event)} · ${event.venueName || chapter.venueName}`}
+                          ? `${weekday} · Online · the whole national network`
+                          : `${weekday} · ${timeLabel(event)}`}
                       </div>
                     </div>
-                    <a href={event.rsvpUrl}>{event.type === "summit" ? "Save my seat" : "RSVP"}</a>
+                    <a href={event.rsvpUrl}>RSVP</a>
                   </div>
                 );
               })}
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="sec" style={{ paddingTop: 0 }} id="hosts">
-        <div className="c">
-          <div className="head">
-            <div>
-              <div className="eyebrow">Your hosts</div>
-              <h2 className="big" style={{ marginTop: 10 }}>
-                {hostTitle(chapter)}
-              </h2>
-            </div>
-            <p>{chapter.hostIntro}</p>
-          </div>
-          <div className="hosts">
-            {chapter.hosts.map((host) => (
-              <article className="host" id={`host-${host.id}`} key={host.id}>
-                <Image src={host.photo} alt={`${host.name}, host of the ${chapter.groupName} women's real estate investing meetup`} width={host.photoWidth} height={host.photoHeight} />
-                <div>
-                  <div className="n">{host.name}</div>
-                  <div className="r">{host.role}</div>
-                  <p>{host.bio}</p>
-                </div>
-              </article>
-            ))}
           </div>
         </div>
       </section>
@@ -289,26 +224,26 @@ export function ChapterView({ chapter }: { chapter: Chapter }) {
       <section className="c" style={{ paddingTop: 80 }}>
         <div className="signup on-mid">
           <div>
-            <div className="eyebrow">Join {chapter.city}</div>
+            <div className="eyebrow">Stay in the loop</div>
             <h2 className="big" style={{ marginTop: 10 }}>
-              Get the {chapter.city} invites
+              Subscribe to {name}
             </h2>
             <p>Hear about each {chapter.city} meetup first, plus the national newsletter.</p>
           </div>
           <SignupForm
             kind="city-signup"
-            button={`Join the ${chapter.city} list`}
-            emailLabel={`Yes, email me ${chapter.city} meetup invites and WREI Connected news.`}
+            button="Subscribe"
+            emailLabel={`Yes, email me ${name} invites and WREI Connected news.`}
             cityValue={`${chapter.city}, ${chapter.stateCode}`}
           />
         </div>
         <div className="nat">
           <div>
             <h3>Part of a national network</h3>
-            <p>{chapter.city} members also get the Quarterly Summit and a welcome at any group across the country.</p>
+            <p>{chapter.city} members also get the Quarterly Summit and a welcome at any market across the country.</p>
           </div>
           <Link className="btn btn-mid" href="/find">
-            See all groups
+            See all markets
           </Link>
         </div>
       </section>

@@ -325,7 +325,8 @@ export function schemasForPath(path: string): JsonLd[] {
     "/partner": "Become a Partner",
     "/sponsors": "Sponsors",
     "/about": "Our Story",
-    "/coaching": "Coaching",
+    "/apply": "Apply to Open a Market",
+    "/affiliates": "Affiliates",
     "/blog": "Blog",
   };
   return [
@@ -345,7 +346,8 @@ export function getRouteSchemas(): { path: string; nodes: JsonLd[] }[] {
     "/partner",
     "/sponsors",
     "/about",
-    "/coaching",
+    "/apply",
+    "/affiliates",
     "/blog",
     ...chapters.flatMap((chapter) => [`/${chapter.slug}`, `/blog/city/${chapter.slug}`]),
     ...getAllPosts().map((post) => `/blog/${post.slug}`),

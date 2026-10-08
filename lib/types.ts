@@ -24,13 +24,14 @@ export type Chapter = {
   lookForDetail: string;
   parkingNote: string;
   cost: string;
-  heroLede: string;
   hosts: Host[];
   eventbriteOrganizerUrl: string;
   hostContactEmail: string;
   timezone: string;
   lat: number;
   lng: number;
+  /** Affiliate sub-header, e.g. "901 Women In Real Estate Development (WIRED)". */
+  poweredBy?: string;
   formerly?: string;
   alternateNames?: string[];
   social: {
@@ -43,6 +44,7 @@ export type Chapter = {
   heroImage: string;
   heroImageAlt: string;
   placeholder: boolean;
+  /** "Message from your hosts" section. Co-hosts write this in their own words. */
   hostIntro: string;
   /** Short line on the home and find cards. */
   directoryBlurb: string;

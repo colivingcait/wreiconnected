@@ -13,7 +13,7 @@ export type SeoEntry = {
 const HOME_TITLE =
   "WREI Connected | National Network of Women's Real Estate Investing Meetups";
 const HOME_DESCRIPTION =
-  "WREI Connected is a national network of women's real estate investing meetups, with local chapters across the U.S. and a Quarterly Summit online. Find women real estate investors in your city.";
+  "WREI Connected is a national network of women's real estate investing meetups, with local markets across the U.S. and a Quarterly Summit online. Find women real estate investors in your city.";
 
 export function cityTitle(city: string): string {
   return `Women's Real Estate Investing Meetup in ${city} | WREI Connected`;
@@ -64,7 +64,7 @@ export function findSeo(): SeoEntry {
     path: "/find",
     title: "Find a Women's Real Estate Investing Meetup | WREI Connected",
     description:
-      "Find a WREI Connected chapter or affiliate near you. In-person women's real estate investing meetups across the U.S., plus the Quarterly Summit online.",
+      "Find a WREI Connected market near you. In-person women's real estate investing meetups across the U.S., plus the Quarterly Summit online.",
   };
 }
 
@@ -73,7 +73,7 @@ export function eventsSeo(): SeoEntry {
     path: "/events",
     title: "Women's Real Estate Investing Meetups Near You | WREI Connected",
     description:
-      "Every WREI Connected women's real estate investing meetup on one calendar. Chapters, affiliates, and the Quarterly Summit online. Filter by state and date.",
+      "Every WREI Connected women's real estate investing meetup on one calendar. Markets, affiliates, and the Quarterly Summit online. Filter by state and date.",
   };
 }
 
@@ -82,7 +82,7 @@ export function partnerSeo(): SeoEntry {
     path: "/partner",
     title: "Become a Partner | WREI Connected, Women's Real Estate Investing",
     description:
-      "Host a women's real estate investing meetup with WREI Connected. Chapters get funding, marketing, and a national network. Affiliates keep their own brand.",
+      "Host a women's real estate investing meetup with WREI Connected. Markets get funding, marketing, and a national network. Affiliates keep their own brand.",
   };
 }
 
@@ -100,16 +100,25 @@ export function aboutSeo(): SeoEntry {
     path: "/about",
     title: "Our Story | WREI Connected, Women's Real Estate Investing",
     description:
-      "WREI Connected started when two women real estate investors met at a meetup. The Atlanta chapter was formerly Atlanta Women Investors. Local meetups, national network.",
+      "WREI Connected started when two women real estate investors met at a meetup. Atlanta WREI Connected was formerly Atlanta Women Investors. Local meetups, national network.",
   };
 }
 
-export function coachingSeo(): SeoEntry {
+export function applySeo(): SeoEntry {
   return {
-    path: "/coaching",
-    title: "Coaching from the WREI Connected Community | Women's Real Estate Investing",
+    path: "/apply",
+    title: "Apply to Open a Market | WREI Connected, Women's Real Estate Investing",
     description:
-      "Join the waitlist for coaching from the WREI Connected community. Structured guidance for women real estate investors and investors of any gender. No pricing yet.",
+      "Apply to open a WREI Connected market and host a women's real estate investing meetup in your city, with the national network behind you.",
+  };
+}
+
+export function affiliatesSeo(): SeoEntry {
+  return {
+    path: "/affiliates",
+    title: "Affiliates | WREI Connected, Women's Real Estate Investing",
+    description:
+      "WREI Connected affiliates are women's real estate investing groups that keep their own name and belong to the national network.",
   };
 }
 
@@ -126,7 +135,7 @@ export function blogCitySeo(cityName: string, slug: string): SeoEntry {
   return {
     path: `/blog/city/${slug}`,
     title: `Women's Real Estate Investing in ${cityName} | WREI Connected`,
-    description: `Guides and meetup recaps for women real estate investors in ${cityName}, from the WREI Connected ${cityName} chapter.`,
+    description: `Guides and meetup recaps for women real estate investors in ${cityName}, from ${cityName} WREI Connected.`,
     city: cityName,
   };
 }
@@ -159,7 +168,8 @@ export function getSeoInventory(): SeoEntry[] {
     partnerSeo(),
     sponsorsSeo(),
     aboutSeo(),
-    coachingSeo(),
+    applySeo(),
+    affiliatesSeo(),
     blogIndexSeo(),
   ];
   const chapterEntries = chapters.flatMap((chapter) => [

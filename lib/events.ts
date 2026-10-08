@@ -130,7 +130,19 @@ export const events: WreiEvent[] = [
     endTime: null,
     title: "Quarterly Summit – Q4 2026",
     topic:
-      "Four times a year, every chapter and Affiliate meets online. Hear from investors across the country and meet women beyond your city.",
+      "Four times a year, every market meets online. Hear from investors across the country and meet women beyond your city.",
+    rsvpUrl: PLACEHOLDER_RSVP,
+    placeholder: true,
+  },
+  {
+    id: "memphis-2026-11-19",
+    type: "chapter",
+    groupId: "memphis",
+    date: "2026-11-19", // PLACEHOLDER date until the Memphis co-hosts confirm
+    startTime: "18:30",
+    endTime: "20:30",
+    title: "November Meetup",
+    topic: "PLACEHOLDER topic from Eventbrite.",
     rsvpUrl: PLACEHOLDER_RSVP,
     placeholder: true,
   },
@@ -248,7 +260,7 @@ export function nextSummit(today = new Date()): WreiEvent | undefined {
 export function eventName(event: WreiEvent, group?: DirectoryGroup): string {
   if (event.type === "summit") return event.title;
   if (event.type === "chapter" && group) {
-    return `WREI Connected | ${group.city} – ${monthLong(event.date)} Meetup`;
+    return `${group.city} WREI Connected – ${monthLong(event.date)} Meetup`;
   }
   return group ? `${group.name} – ${event.title}` : event.title;
 }

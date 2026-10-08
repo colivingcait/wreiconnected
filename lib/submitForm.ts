@@ -3,7 +3,7 @@
 export type FormKind =
   | "national-signup"
   | "city-signup"
-  | "coaching-waitlist"
+  | "market-application"
   | "partner-application"
   | "sponsor-inquiry"
   | "message-hosts";

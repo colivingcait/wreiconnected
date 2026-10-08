@@ -56,8 +56,7 @@ export function FindExplorer({ groups }: { groups: DirectoryGroup[] }) {
               Find your people, <em>in your city.</em>
             </h1>
             <p className="lede">
-              Every group in the network meets in person. Chapters run under WREI Connected. Affiliates keep their own
-              name and are part of the national network of women&apos;s real estate investing meetups.
+              Every market in the network meets in person, and all of them are part of the national network of women&apos;s real estate investing meetups.
             </p>
       <div className="bar-find">
         <form className="search" action="/find" method="get">
@@ -69,7 +68,7 @@ export function FindExplorer({ groups }: { groups: DirectoryGroup[] }) {
         {(
           [
             ["all", "All groups"],
-            ["chapter", "Chapters"],
+            ["chapter", "Markets"],
             ["affiliate", "Affiliates"],
           ] as const
         ).map(([value, label]) => (
@@ -85,7 +84,7 @@ export function FindExplorer({ groups }: { groups: DirectoryGroup[] }) {
       <div className="wrap">
         <div className="list">
           <h2>
-            Chapters <span>{chapters.length}</span>
+            Markets <span>{chapters.length}</span>
           </h2>
           {chapters.map((group) => (
             <GroupCard key={group.id} group={group} />
@@ -107,7 +106,7 @@ export function FindExplorer({ groups }: { groups: DirectoryGroup[] }) {
               <div className="lg">
                 <span>
                   <i style={{ background: "#1B2A4A", boxShadow: "0 0 0 4px #F2A98A73", display: "inline-block", width: 11, height: 11, borderRadius: "50%", marginRight: 6 }} />
-                  Chapter
+                  Market
                 </span>
                 <span>
                   <i style={{ background: "#fff", border: "2px solid #1B2A4A", display: "inline-block", width: 11, height: 11, borderRadius: "50%", marginRight: 6 }} />
@@ -141,10 +140,10 @@ export function FindExplorer({ groups }: { groups: DirectoryGroup[] }) {
         <div>
           <div className="eyebrow">Don&apos;t see your city?</div>
           <h2>Start a group, with a national network behind you.</h2>
-          <p>Launch a new Chapter, or bring the group you already run in as an Affiliate.</p>
+          <p>Apply to open a WREI Connected market in your city.</p>
         </div>
-        <Link className="btn btn-mid" href="/partner">
-          Become a partner
+        <Link className="btn btn-mid" href="/apply">
+          Apply to open a market
         </Link>
       </div>
       </div>
@@ -163,7 +162,7 @@ function GroupCard({ group }: { group: DirectoryGroup }) {
         <div className="s">{group.blurb}</div>
       </div>
       <span className={group.kind === "chapter" ? "pill ch" : "pill af"}>
-        {group.kind === "chapter" ? "Chapter" : "Affiliate"}
+        {group.kind === "chapter" ? "Market" : "Affiliate"}
       </span>
       <div className="nx">
         {event && parts
@@ -173,7 +172,7 @@ function GroupCard({ group }: { group: DirectoryGroup }) {
             : "RSVP on their site"}
         {href ? (
           <Link href={href}>
-            <span>View chapter →</span>
+            <span>View market →</span>
           </Link>
         ) : (
           <span>Directory listing</span>

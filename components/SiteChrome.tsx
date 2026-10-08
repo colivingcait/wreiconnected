@@ -9,9 +9,7 @@ import { FOOTER_KEYWORD_LINE, PRIMARY_TAGLINE } from "@/lib/site";
 const LINKS = [
   { href: "/find", label: "Find a Meetup" },
   { href: "/events", label: "Events" },
-  { href: "/partner", label: "Become a Partner" },
   { href: "/sponsors", label: "Sponsors" },
-  { href: "/coaching", label: "Coaching" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
 ];
@@ -100,10 +98,11 @@ export function Footer() {
             <a href="#facebook-group">Facebook group</a>
           </div>
           <div>
-            <h4>Partners</h4>
-            <Link href="/partner">Become a Partner</Link>
+            <h4>Get involved</h4>
+            <Link href="/apply">Open a market</Link>
+            <Link href="/affiliates">Affiliates</Link>
             <Link href="/sponsors">Sponsors</Link>
-            <Link href="/coaching">Coaching</Link>
+            <Link href="/partner">Partner with us</Link>
           </div>
           <div>
             <h4>About</h4>

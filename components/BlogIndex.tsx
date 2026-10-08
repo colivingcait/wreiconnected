@@ -91,7 +91,7 @@ export function BlogIndex({ posts }: { posts: Card[] }) {
               {featured.authorPhoto ? <Image src={featured.authorPhoto} alt="" width={34} height={34} /> : null}
               <span>
                 <b>{featured.authorName}</b>
-                {featured.city ? ` · Host, WREI Connected | ${featured.city[0].toUpperCase()}${featured.city.slice(1)}` : ""} · {featured.minutes} min read
+                {featured.city ? ` · Host, ${featured.city[0].toUpperCase()}${featured.city.slice(1)} WREI Connected` : ""} · {featured.minutes} min read
               </span>
             </div>
           </div>

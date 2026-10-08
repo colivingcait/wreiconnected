@@ -9,7 +9,21 @@ export const SITE_UPDATED = "2026-09-28";
 
 /** SEO-SPEC §10. Do not paraphrase. */
 export const NATIONAL_SENTENCE =
-  "WREI Connected is a national network of women's real estate investing meetups, with local chapters across the U.S. and a Quarterly Summit online.";
+  "WREI Connected is a national network of women's real estate investing meetups, with local markets across the U.S. and a Quarterly Summit online.";
+
+/** Same blurb on every market page. */
+export const MARKET_BLURB =
+  "The place for women real estate investors to build relationships, exchange ideas, and grow together.";
+
+/** Shared market hero photo until a host sends a group photo for their page. */
+export const MARKET_DEFAULT_IMAGE = "/images/wcl-summit.jpg";
+export const MARKET_DEFAULT_IMAGE_ALT =
+  "WREI Connected founders with the speakers at the WCL Summit";
+
+/** "Memphis WREI Connected" */
+export function marketName(city: string): string {
+  return `${city} WREI Connected`;
+}
 
 export const PRIMARY_TAGLINE = "Local meetups. National network.";
 export const HOST_CTA = "Your group. Our network.";
@@ -23,6 +37,8 @@ export const RESERVED_SLUGS = [
   "sponsors",
   "about",
   "coaching",
+  "apply",
+  "affiliates",
   "blog",
   "keystatic",
   "api",
@@ -35,7 +51,7 @@ export function absoluteUrl(path: string): string {
 
 /** SEO-SPEC §10 city sentence. Do not paraphrase. */
 export function citySentence(city: string, state: string): string {
-  return `WREI Connected | ${city} is a free monthly women's real estate investing meetup in ${city}, ${state}, and a chapter of WREI Connected, the national network of women's real estate investing meetups.`;
+  return `${marketName(city)} is a free monthly women's real estate investing meetup in ${city}, ${state}, and a market of WREI Connected, the national network of women's real estate investing meetups.`;
 }
 
 export function aboutSentence(input: {

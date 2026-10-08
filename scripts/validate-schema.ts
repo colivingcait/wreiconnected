@@ -127,8 +127,8 @@ for (const chapter of chapters) {
     if (!description.startsWith(citySentence(chapter.city, chapter.state))) {
       failures.push(`/${chapter.slug} Event.description must start with the city sentence`);
     }
-    if (!String(event.name).includes(`WREI Connected | ${chapter.city}`)) {
-      failures.push(`/${chapter.slug} Event.name should be WREI Connected | ${chapter.city} – Month Meetup`);
+    if (!String(event.name).includes(`${chapter.city} WREI Connected`)) {
+      failures.push(`/${chapter.slug} Event.name should be ${chapter.city} WREI Connected – Month Meetup`);
     }
     const location = asNode(event.location);
     if (!types(location).includes("Place")) failures.push(`/${chapter.slug} Event location is not a Place`);

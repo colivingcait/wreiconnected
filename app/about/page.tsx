@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { Footer, Top } from "@/components/SiteChrome";
 import { schemasForPath } from "@/lib/schema";
 import { buildMetadata, aboutSeo } from "@/lib/seo";
-import { HOST_CTA, NATIONAL_SENTENCE } from "@/lib/site";
+import { NATIONAL_SENTENCE } from "@/lib/site";
 
 export const metadata = buildMetadata(aboutSeo());
 
@@ -62,7 +62,7 @@ export default function AboutPage() {
               </p>
               <p>
                 Over the next couple of years we grew to <b>50 rooms</b> plus long-term rentals, and started co-hosting
-                women&apos;s investing events, including monthly meetups in Atlanta. The Atlanta chapter was formerly
+                women&apos;s investing events, including monthly meetups in Atlanta. Atlanta WREI Connected was formerly
                 Atlanta Women Investors.
               </p>
               <p>
@@ -226,10 +226,10 @@ export default function AboutPage() {
           </div>
           <div className="card coach">
             <div className="eyebrow">Host in your city</div>
-            <h3>{HOST_CTA}</h3>
-            <p>Start a Chapter or bring your group in as an Affiliate.</p>
-            <Link className="btn btn-mid" href="/partner">
-              Become a partner
+            <h3>Open a market</h3>
+            <p>Want to start a market meetup? Apply to open a market.</p>
+            <Link className="btn btn-mid" href="/apply">
+              Apply to open a market
             </Link>
           </div>
         </div>

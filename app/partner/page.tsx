@@ -49,7 +49,7 @@ export default function PartnerPage() {
                 Apply to partner
               </a>
               <a className="btn btn-line-lt" href="#compare">
-                Compare Chapter and Affiliate
+                Compare Market and Affiliate
               </a>
             </div>
           </div>
@@ -90,12 +90,12 @@ export default function PartnerPage() {
             <div>
               <div className="k" />
               <h3>Funding and venues</h3>
-              <p>Chapters get startup venue support and help negotiating venues, so the first meetup doesn&apos;t come out of your pocket.</p>
+              <p>Markets get startup venue support and help negotiating venues, so the first meetup doesn&apos;t come out of your pocket.</p>
             </div>
             <div>
               <div className="k" />
               <h3>Marketing done for you</h3>
-              <p>Chapters get email and text campaigns, event pages, and a featured spot on the website. You focus on the room.</p>
+              <p>Markets get email and text campaigns, event pages, and a featured spot on the website. You focus on the room.</p>
             </div>
             <div>
               <div className="k" />
@@ -112,19 +112,19 @@ export default function PartnerPage() {
             <div>
               <div className="eyebrow">Two ways to join</div>
               <h2 className="big" style={{ marginTop: 10 }}>
-                Chapter or Affiliate
+                Market or Affiliate
               </h2>
             </div>
-            <p>Both are real options. Chapter gets the most support. Affiliate lets an established group join and keep its own brand.</p>
+            <p>Both are real options. A market gets the most support. Affiliate lets an established group join and keep its own brand.</p>
           </div>
           <div className="cmp">
             <div className="tier ch">
               <div className="top2">
-                <div className="eyebrow">WREI Connected Chapter</div>
+                <div className="eyebrow">WREI Connected Market</div>
                 <span className="rec">Recommended</span>
               </div>
               <h3>Run it with us</h3>
-              <div className="nm">Named &quot;WREI Connected | Your City&quot;</div>
+              <div className="nm">Named &quot;Your City WREI Connected&quot;</div>
               <dl>
                 {CHAPTER_ROWS.map(([label, text]) => (
                   <span key={label} style={{ display: "contents" }}>
@@ -134,7 +134,7 @@ export default function PartnerPage() {
                 ))}
               </dl>
               <a className="btn btn-peach" href="#apply">
-                Apply as a Chapter
+                Apply as a Market
               </a>
             </div>
             <div className="tier af">
@@ -156,7 +156,7 @@ export default function PartnerPage() {
               </a>
             </div>
           </div>
-          <p className="conv">Start as an Affiliate and change your mind later? You can become a Chapter anytime, with full onboarding support.</p>
+          <p className="conv">Start as an Affiliate and change your mind later? You can become a Market anytime, with full onboarding support.</p>
         </div>
       </section>
 
@@ -220,12 +220,12 @@ export default function PartnerPage() {
             <div className="step">
               <div className="no">03</div>
               <h3>Agreement</h3>
-              <p>Sign a Chapter or Affiliate agreement, including clear terms on who owns which member lists.</p>
+              <p>Sign a Market or Affiliate agreement, including clear terms on who owns which member lists.</p>
             </div>
             <div className="step">
               <div className="no">04</div>
               <h3>Onboarding</h3>
-              <p>Chapters get a brand kit, Eventbrite setup, saved venues, and a city page. Affiliates get a listing, a signup link, and a QR code.</p>
+              <p>Markets get a brand kit, Eventbrite setup, saved venues, and a city page. Affiliates get a listing, a signup link, and a QR code.</p>
             </div>
           </div>
         </div>

@@ -46,11 +46,10 @@ export default async function BlogCityPage({ params }: { params: Promise<{ city:
             Women&apos;s real estate investing in <em>{chapter.city}</em>
           </h1>
           <p className="lede">
-            Guides and meetup recaps for women real estate investors in {chapter.city}, from WREI Connected |{" "}
-            {chapter.city}.
+            Guides and meetup recaps for women real estate investors in {chapter.city}, from {chapter.city} WREI Connected.
           </p>
           <Link className="btn btn-peach" href={`/${chapter.slug}`}>
-            Visit the {chapter.city} chapter
+            Visit the {chapter.city} market
           </Link>
         </section>
       </Top>

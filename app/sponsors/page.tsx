@@ -93,7 +93,7 @@ export default function SponsorsPage() {
           <div className="gets5">
             <div className="g">
               <div className="no">01</div>
-              <h3>Presence at Chapter meetups</h3>
+              <h3>Presence at market meetups</h3>
               <p>A two-minute welcome, a resource table, and thank-yous on slides and in the event emails.</p>
             </div>
             <div className="g">
@@ -139,8 +139,8 @@ export default function SponsorsPage() {
           <div className="ways">
             <div className="way nat">
               <div className="eyebrow">National sponsorship</div>
-              <h3>Every Chapter, the Summit, and the national list</h3>
-              <p>A national package covers Chapter meetups across the country, the Quarterly Summit, the website, and the newsletter.</p>
+              <h3>Every market, the Summit, and the national list</h3>
+              <p>A national package covers market meetups across the country, the Quarterly Summit, the website, and the newsletter.</p>
               <div className="tiers">
                 <span>Title sponsor</span>
                 <span>National partner</span>
@@ -153,7 +153,7 @@ export default function SponsorsPage() {
             <div className="way loc">
               <div className="eyebrow">Local event sponsor</div>
               <h3>Present one meetup in one city</h3>
-              <p>Be the presenting sponsor for a single Chapter meetup. It&apos;s a good fit for a local lender, contractor, or title company that wants to cover food and meet the room.</p>
+              <p>Be the presenting sponsor for a single market meetup. It&apos;s a good fit for a local lender, contractor, or title company that wants to cover food and meet the room.</p>
               <div style={{ height: 22 }} />
               <Link className="btn btn-mid" href="#inquire">
                 Sponsor a local meetup

@@ -116,7 +116,7 @@ export function EventsMap({
       </Map>
       <div className="map-legend">
         <div>
-          <i /> Chapter
+          <i /> Market
         </div>
         <div>
           <i className="af" /> Affiliate
@@ -149,7 +149,7 @@ function VenueCard({ group }: { group: MapGroup }) {
     <div className="pop-card">
       <div className="g">{group.group.name}</div>
       <div className="s">
-        {group.group.kind === "chapter" ? "Chapter" : "Affiliate"}
+        {group.group.kind === "chapter" ? "Market" : "Affiliate"}
         {group.group.venueName ? ` · ${group.group.venueName}` : ""}
       </div>
       {group.upcoming.slice(0, 2).map((event) => (
@@ -169,7 +169,7 @@ function VenueCard({ group }: { group: MapGroup }) {
         ) : null}
         {group.group.hasPage ? (
           <Link className="btn btn-line" href={`/${group.group.id}`}>
-            Chapter page
+            Market page
           </Link>
         ) : null}
       </div>

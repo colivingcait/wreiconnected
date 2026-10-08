@@ -51,19 +51,28 @@ export function SignupForm({
   if (status === "done") return <Done>{THANKS}</Done>;
   return (
     <form className="form" onSubmit={onSubmit}>
-      <input name="firstName" placeholder="First name" aria-label="First name" required />
-      <input name="email" type="email" placeholder="Email" aria-label="Email" required />
-      <input
-        className="full"
-        name="city"
-        placeholder={cityPlaceholder}
-        aria-label="City"
-        defaultValue={cityValue}
-        required
-      />
-      {kind === "national-signup" ? (
-        <input className="full" name="phone" type="tel" placeholder="Phone (optional)" aria-label="Phone (optional)" />
-      ) : null}
+      {kind === "city-signup" ? (
+        <>
+          <input type="hidden" name="city" value={cityValue} />
+          <input className="full" name="name" placeholder="Name" aria-label="Name" required />
+          <input name="email" type="email" placeholder="Email" aria-label="Email" required />
+          <input name="phone" type="tel" placeholder="Phone" aria-label="Phone" />
+        </>
+      ) : (
+        <>
+          <input name="firstName" placeholder="First name" aria-label="First name" required />
+          <input name="email" type="email" placeholder="Email" aria-label="Email" required />
+          <input
+            className="full"
+            name="city"
+            placeholder={cityPlaceholder}
+            aria-label="City"
+            defaultValue={cityValue}
+            required
+          />
+          <input className="full" name="phone" type="tel" placeholder="Phone (optional)" aria-label="Phone (optional)" />
+        </>
+      )}
       <label className="chk full">
         <input type="checkbox" name="emailConsent" defaultChecked />
         {emailLabel}
@@ -104,38 +113,6 @@ export function HostMessageForm({ city }: { city: string }) {
   );
 }
 
-const STAGES = ["Haven't started yet", "Working on my first deal", "1 to 3 deals", "4 or more deals"];
-
-export function CoachingForm() {
-  const { status, onSubmit } = useSubmit("coaching-waitlist");
-  const [stage, setStage] = useState(STAGES[1]);
-  if (status === "done") return <Done>{THANKS}</Done>;
-  return (
-    <form onSubmit={onSubmit}>
-      <div className="two">
-        <input name="firstName" placeholder="First name" aria-label="First name" required />
-        <input name="email" type="email" placeholder="Email" aria-label="Email" required />
-      </div>
-      <label className="field-label">Where are you right now?</label>
-      <input type="hidden" name="stage" value={stage} />
-      <div className="stage">
-        {STAGES.map((item) => (
-          <button key={item} type="button" className={item === stage ? "on" : undefined} onClick={() => setStage(item)}>
-            {item}
-          </button>
-        ))}
-      </div>
-      <label className="chk">
-        <input type="checkbox" name="smsConsent" />
-        Optional: text me when it opens. Msg and data rates may apply. Reply STOP to opt out.
-      </label>
-      <button className="btn btn-peach" type="submit" style={{ display: "block", width: "100%" }} disabled={status === "sending"}>
-        {status === "sending" ? "Sending…" : "Join the waitlist"}
-      </button>
-    </form>
-  );
-}
-
 function Segment<T extends string>({
   name,
   value,
@@ -163,6 +140,71 @@ function Segment<T extends string>({
         </button>
       ))}
     </div>
+  );
+}
+
+export function MarketApplicationForm() {
+  const { status, onSubmit } = useSubmit("market-application");
+  const [starting, setStarting] = useState("new");
+  if (status === "done") return <Done>{THANKS}</Done>;
+  return (
+    <form className="fg" onSubmit={onSubmit}>
+      <div className="fl">
+        <label htmlFor="market-name">First and last name</label>
+        <input id="market-name" name="name" required />
+      </div>
+      <div className="fl">
+        <label htmlFor="market-email">Email</label>
+        <input id="market-email" name="email" type="email" required />
+      </div>
+      <div className="fl">
+        <label htmlFor="market-phone">Phone</label>
+        <input id="market-phone" name="phone" type="tel" />
+      </div>
+      <div className="fl">
+        <label htmlFor="market-city">City or metro</label>
+        <input id="market-city" name="city" placeholder="e.g. Charlotte, NC" required />
+      </div>
+      <div className="fl full">
+        <label>Where are you starting from?</label>
+        <Segment
+          name="starting"
+          value={starting}
+          onChange={setStarting}
+          options={[
+            { value: "new", label: "I want to start one", hint: "No group yet" },
+            { value: "existing", label: "I run a group today", hint: "Tell us about it below" },
+          ]}
+        />
+      </div>
+      <div className="fl">
+        <label htmlFor="market-cohost">
+          Co-host name <span>(if you have one)</span>
+        </label>
+        <input id="market-cohost" name="coHost" />
+      </div>
+      <div className="fl">
+        <label htmlFor="market-link">
+          Website or social link <span>(optional)</span>
+        </label>
+        <input id="market-link" name="link" />
+      </div>
+      <div className="fl full">
+        <label htmlFor="market-why">Why do you want to open a market?</label>
+        <textarea id="market-why" name="why" />
+      </div>
+      <label className="chk full">
+        <input type="checkbox" name="emailConsent" defaultChecked />
+        Email me about my application and WREI Connected news.
+      </label>
+      <label className="chk full">
+        <input type="checkbox" name="smsConsent" />
+        Optional: text me about my application. Msg and data rates may apply. Reply STOP to opt out.
+      </label>
+      <button className="btn btn-peach full" type="submit" disabled={status === "sending"}>
+        {status === "sending" ? "Sending…" : "Submit application"}
+      </button>
+    </form>
   );
 }
 
@@ -220,7 +262,7 @@ export function PartnerForm() {
           value={interest}
           onChange={setInterest}
           options={[
-            { value: "chapter", label: "Chapter", hint: "Recommended" },
+            { value: "chapter", label: "Market", hint: "Recommended" },
             { value: "affiliate", label: "Affiliate", hint: "Keep my brand" },
             { value: "unsure", label: "Not sure yet", hint: "Let's talk" },
           ]}
@@ -293,7 +335,7 @@ export function SponsorForm() {
           value={interest}
           onChange={setInterest}
           options={[
-            { value: "national", label: "National", hint: "Every Chapter + Summit" },
+            { value: "national", label: "National", hint: "Every market + Summit" },
             { value: "local", label: "Local event", hint: "One meetup" },
             { value: "unsure", label: "Not sure yet", hint: "Send the media kit" },
           ]}

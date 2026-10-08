@@ -39,7 +39,7 @@ export default function BlogPage() {
               Investing in your city
             </h2>
           </div>
-          <p>Every chapter publishes a local guide written by its hosts.</p>
+          <p>Every market publishes a local guide written by its hosts.</p>
         </div>
         <div className="cg">
           {chapters.map((chapter) => {

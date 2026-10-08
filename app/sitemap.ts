@@ -4,7 +4,7 @@ import { chapters } from "@/lib/chapters";
 import { SITE_UPDATED, absoluteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = ["/", "/find", "/events", "/partner", "/sponsors", "/about", "/coaching", "/blog"];
+  const staticPaths = ["/", "/find", "/events", "/partner", "/sponsors", "/about", "/apply", "/affiliates", "/blog"];
   return [
     ...staticPaths.map((path) => ({
       url: path === "/" ? absoluteUrl("/") : absoluteUrl(path),

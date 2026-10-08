@@ -83,7 +83,7 @@ export function EventsBrowser({ initialEvents }: { initialEvents: WreiEvent[] })
           {(
             [
               ["all", "All"],
-              ["chapter", "Chapters"],
+              ["chapter", "Markets"],
               ["affiliate", "Affiliates"],
               ["summit", "Summits"],
             ] as const
@@ -128,7 +128,7 @@ export function EventsBrowser({ initialEvents }: { initialEvents: WreiEvent[] })
                 const parts = dateParts(event, tz);
                 const place = placeLine(event, group);
                 const badge = event.type === "summit" ? "su" : event.type === "affiliate" ? "af" : "ch";
-                const badgeLabel = event.type === "summit" ? "Summit" : event.type === "affiliate" ? "Affiliate" : "Chapter";
+                const badgeLabel = event.type === "summit" ? "Summit" : event.type === "affiliate" ? "Affiliate" : "Market";
                 return (
                   <article key={event.id} className={event.type === "summit" ? "er sum" : "er"}>
                     <div className="dt">

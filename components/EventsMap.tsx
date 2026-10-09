@@ -1,7 +1,7 @@
 "use client";
 
 import { setWorkerUrl } from "maplibre-gl";
-import Map, { Marker, NavigationControl, Popup } from "react-map-gl/maplibre";
+import Map, { Marker, NavigationControl } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // Webpack rewrites MapLibre's default worker to a URL that 404s, and a
@@ -51,6 +51,8 @@ export function EventsMap({
     ];
   }, [groups]);
   const mapRef = useRef<MapRef>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [cardPos, setCardPos] = useState({ left: 18, top: 18 });
   const fit = useCallback(() => {
     if (!bounds || !mapRef.current) return;
     const narrow = window.matchMedia("(max-width: 980px)").matches;
@@ -67,8 +69,42 @@ export function EventsMap({
     return () => window.removeEventListener("resize", fit);
   }, [fit]);
 
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const place = () => {
+      const pin = stage.querySelector(".mpin.sel i") ?? stage.querySelector(".mpin.sel");
+      const card = stage.querySelector(".map-card");
+      if (!(pin instanceof HTMLElement) || !(card instanceof HTMLElement)) return;
+      const sr = stage.getBoundingClientRect();
+      const pr = pin.getBoundingClientRect();
+      const cardW = card.offsetWidth;
+      const cardH = card.offsetHeight;
+      const margin = 12;
+      const bottomGap = 88;
+      let left = pr.right - sr.left + 14;
+      let top = pr.top - sr.top;
+      if (left + cardW > sr.width - margin) left = pr.left - sr.left - cardW - 14;
+      left = Math.min(Math.max(margin, left), Math.max(margin, sr.width - margin - cardW));
+      const maxTop = Math.max(margin, sr.height - bottomGap - cardH);
+      if (top + cardH > sr.height - bottomGap) top = pr.top - sr.top - cardH - 8;
+      top = Math.min(Math.max(margin, top), maxTop);
+      left = Math.round(left);
+      top = Math.round(top);
+      setCardPos((prev) => (prev.left === left && prev.top === top ? prev : { left, top }));
+    };
+    place();
+    const map = mapRef.current?.getMap();
+    map?.on("move", place);
+    map?.on("resize", place);
+    return () => {
+      map?.off("move", place);
+      map?.off("resize", place);
+    };
+  }, [selected?.group.id]);
+
   return (
-    <div className={`mapstage${sheetOpen && selected ? " has-sheet" : ""}`}>
+    <div className={`mapstage${sheetOpen && selected ? " has-sheet" : ""}`} ref={stageRef}>
       <Map
         ref={mapRef}
         key={groups.map((item) => item.group.id).join("-") || "empty"}
@@ -92,6 +128,8 @@ export function EventsMap({
             onClick={(event) => {
               event.originalEvent.stopPropagation();
               onSelect(group.id);
+              setSheetFor(group.id);
+              setSheetOpen(true);
             }}
           >
             <span className={`mpin ${group.kind === "affiliate" ? "af" : "ch"} ${selected?.group.id === group.id ? "sel" : ""}`}>
@@ -100,20 +138,12 @@ export function EventsMap({
             </span>
           </Marker>
         ))}
-        {selected ? (
-          <Popup
-            longitude={selected.group.lng}
-            latitude={selected.group.lat}
-            anchor="top"
-            onClose={() => onSelect("")}
-            closeOnClick={false}
-            offset={16}
-            className="map-popup"
-          >
-            <VenueCard group={selected} />
-          </Popup>
-        ) : null}
       </Map>
+      {selected ? (
+        <div className="map-card" role="dialog" aria-label={selected.group.name} style={{ left: cardPos.left, top: cardPos.top }}>
+          <VenueCard group={selected} />
+        </div>
+      ) : null}
       <div className="map-legend">
         <div>
           <i /> Market
